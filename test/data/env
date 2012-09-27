@@ -1,0 +1,3 @@
+VAR_ONE="foo"
+export VAR_TWO="bar"
+# VAR_THREE="garply"
