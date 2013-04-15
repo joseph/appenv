@@ -1,7 +1,7 @@
 class AppEnv::Environment < ActiveSupport::OrderedOptions
 
   def initialize(file = '.env', &blk)
-    super()
+    super(&nil)
     @file = file
     source = _compile_source_env
     blk.call(self, source)
