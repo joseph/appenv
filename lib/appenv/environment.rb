@@ -62,6 +62,7 @@ class AppEnv::Environment < ActiveSupport::OrderedOptions
       File.open(@file, 'r').each_line { |ln|
         cln = ln.strip.sub(/^export\s+/, '')
         next  if cln.match(/^#/)
+        next  if cln.empty?
         if m = cln.match(/\A([A-Za-z_0-9]+)=(.*)\z/)
           k = m[1]
           v = m[2]
