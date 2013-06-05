@@ -15,4 +15,16 @@ class AppEnv::TestEnvironment < Test::Unit::TestCase
     assert_equal('grault', @env.var3)
   end
 
+
+  def test_expand
+    @env = AppEnv::Environment.new('test/data/env') { |env, src|
+      env.var1 = src.var_one
+    }
+    assert_equal('foo', @env.var1)
+    @env.expand { |env, src|
+      env.var2 = src.var_two
+    }
+    assert_equal('bar', @env.var2)
+  end
+
 end
