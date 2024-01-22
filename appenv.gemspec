@@ -1,18 +1,19 @@
-# -*- encoding: utf-8 -*-
 require File.expand_path('../lib/appenv/version', __FILE__)
 
 Gem::Specification.new do |gem|
+  gem.name = 'appenv'
+  gem.version = AppEnv::VERSION
   gem.authors = ['Joseph Pearson']
-  gem.email = ['joseph@booki.sh']
+  gem.email = 'joseph@users.noreply.github.com'
   gem.description = 'Environment-variable compatible application configuration.'
   gem.summary = 'Application environment configuration'
-  gem.homepage = ''
+  gem.homepage = 'https://github.com/joseph/appenv'
+  gem.license = 'MIT'
 
-  gem.files = `git ls-files`.split($\)
-  gem.executables = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
-  gem.test_files = gem.files.grep(%r{^(test|spec|features)/})
-  gem.name = 'appenv'
-  gem.require_paths = ['lib']
-  gem.version = AppEnv::VERSION
+  gem.files = [
+    'lib/appenv.rb',
+    'lib/appenv/version.rb',
+    'lib/appenv/environment.rb'
+  ]
   gem.add_dependency('activesupport')
 end
