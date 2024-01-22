@@ -58,7 +58,7 @@ class AppEnv::Environment < ActiveSupport::OrderedOptions
 
     def _source_env_from_file
       src = {}
-      return src  unless File.exists?(@file)
+      return src  unless File.exist?(@file)
       File.open(@file, 'r').each_line { |ln|
         cln = ln.strip.sub(/^export\s+/, '')
         next  if cln.match(/^#/)
