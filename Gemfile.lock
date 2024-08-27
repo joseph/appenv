@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    appenv (1.0.1)
+    appenv (1.1.0)
       activesupport
 
 GEM
