@@ -1,1 +1,4 @@
-.screenrc
+tmp/
+pkg/
+.bundle/
+*.gem
