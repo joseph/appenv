@@ -89,6 +89,20 @@ class AppEnv::Environment < ActiveSupport::OrderedOptions
   end
 
 
+  # Collect a line-by-line list of strings in the form: 'property = value'.
+  #
+  def to_a
+    collect { |k, v| "#{k} = #{v.inspect}" }
+  end
+
+
+  # Print a line-by-line list of env values to STDOUT.
+  #
+  def print(pad = '')
+    puts pad+to_a.join("\n"+pad)
+  end
+
+
   private
 
     def _compile_source_env
