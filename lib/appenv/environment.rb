@@ -21,8 +21,8 @@ class AppEnv::Environment < ActiveSupport::OrderedOptions
   #    }
   #
   def expand(&blk)
-    source = _compile_source_env
-    blk.call(self, source)
+    @source = _compile_source_env
+    blk.call(self, @source)
   end
 
 
@@ -32,7 +32,7 @@ class AppEnv::Environment < ActiveSupport::OrderedOptions
   #    # Simple variable assignment:
   #    env.var1 = src.var_one
   #
-  #    # Variable assignment with `set`:
+  #    # Variable assignment with a block:
   #    env.set(:var2) {
   #      if abcd?
   #        'xyz'
@@ -41,8 +41,39 @@ class AppEnv::Environment < ActiveSupport::OrderedOptions
   #      end
   #    }
   #
-  def set(property, &blk)
-    self.send("#{property}=", blk.call)
+  def set(property, value = nil)
+    self[property] = block_given? ? yield : value
+  end
+
+
+  # Creates a property in the env, taking the value from the source hash.
+  # If you want to modify the value from the source before setting it in
+  # the env, supply a block that takes the src value and returns the env value.
+  #
+  # Options:
+  # * :from -- if the source property name differs, supply it
+  # * :required -- raise an error if the property is not assigned a value
+  #
+  def apply(property, options = {})
+    if options.kind_of?(String) || options.kind_of?(Symbol)
+      options = { :from => options }
+    end
+    val = @source[options[:from] || property]
+    self[property] = block_given? ? yield(val) : val
+    assert(property)  if options[:required]
+    self[property]
+  end
+
+
+  # After setting all the environment properties, assert which
+  # properties should exist. The Configurator will raise an
+  # exception listing the missing properties, if any.
+  #
+  def assert(*properties)
+    missing = properties.collect { |prop|
+      prop.to_s.upcase  unless self[prop]
+    }.compact
+    raise("AppEnv requires #{missing.join(', ')}")  if missing.any?
   end
 
 
