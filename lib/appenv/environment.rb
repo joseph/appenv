@@ -65,6 +65,18 @@ class AppEnv::Environment < ActiveSupport::OrderedOptions
   end
 
 
+  # Collect all the source properties that match the pattern as a hash.
+  # If a block is given, yield the hash to the block, which can modify values.
+  # Then merge the hash into the env.
+  #
+  def splat(pattern)
+    hash = ActiveSupport::OrderedOptions.new
+    @source.each_pair { |k, v| hash[k] ||= v  if k.to_s.match(pattern) }
+    yield(hash)  if block_given?
+    self.update(hash)
+  end
+
+
   # After setting all the environment properties, assert which
   # properties should exist. The Configurator will raise an
   # exception listing the missing properties, if any.
